@@ -1,0 +1,13 @@
+diff --git a/node_modules/whatwg-url-without-unicode/lib/URL-impl.js b/node_modules/whatwg-url-without-unicode/lib/URL-impl.js
+index 5818667..6d5a1e1 100644
+--- a/node_modules/whatwg-url-without-unicode/lib/URL-impl.js
++++ b/node_modules/whatwg-url-without-unicode/lib/URL-impl.js
+@@ -6,7 +6,7 @@ const URLSearchParams = require("./URLSearchParams");
+ exports.implementation = class URLImpl {
+   constructor(globalObject, constructorArgs) {
+     const url = constructorArgs[0];
+-    const base = constructorArgs[1];
++    const base = constructorArgs[1] || undefined;
+ 
+     let parsedBase = null;
+     if (base !== undefined) {
