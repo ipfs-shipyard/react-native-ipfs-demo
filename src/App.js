@@ -15,6 +15,4 @@ const App = () => (
   </IpfsProvider>
 );
 
-// console.log({navigator, process, File, ReadableStream});
-
 export default App;
