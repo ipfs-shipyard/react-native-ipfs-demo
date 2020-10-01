@@ -25,7 +25,6 @@
     "@react-navigation/stack": "^5.9.0",
     "big-integer": "^1.6.48",
     "events": "^3.2.0",
-    "formdata-polyfill": "^3.0.20",
     "ipfs-http-client": "^46.1.0",
     "punycode": "^2.1.1",
     "react": "^16.9.0",
