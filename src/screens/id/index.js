@@ -8,9 +8,9 @@ const IdScreen = () => {
 
   const add = async () => {
     try {
-      console.log(await client.id());
+      console.log('Demo App .id', {result: await client.id()});
     } catch (error) {
-      console.error(error);
+      console.error('Demo App .id', {error});
     }
   };
 

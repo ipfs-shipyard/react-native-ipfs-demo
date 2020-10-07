@@ -1,8 +1,8 @@
 diff --git a/node_modules/react-native/Libraries/Network/FormData.js b/node_modules/react-native/Libraries/Network/FormData.js
-index bdb1da3..0d0d7e2 100644
+index bdb1da3..5f3c852 100644
 --- a/node_modules/react-native/Libraries/Network/FormData.js
 +++ b/node_modules/react-native/Libraries/Network/FormData.js
-@@ -64,23 +64,43 @@ class FormData {
+@@ -64,10 +64,31 @@ class FormData {
      this._parts.push([key, value]);
    }
  
@@ -36,20 +36,34 @@ index bdb1da3..0d0d7e2 100644
        const headers: Headers = {'content-disposition': contentDisposition};
  
        // The body part is a "blob", which in React Native just means
-       // an object with a `uri` attribute. Optionally, it can also
+@@ -75,13 +96,24 @@ class FormData {
        // have a `name` and `type` attribute to specify filename and
        // content type (cf. web Blob interface.)
--      if (typeof value === 'object' && value) {
+       if (typeof value === 'object' && value) {
 -        if (typeof value.name === 'string') {
 -          headers['content-disposition'] += '; filename="' + value.name + '"';
 -        }
 -        if (typeof value.type === 'string') {
 -          headers['content-type'] = value.type;
--        }
-+      if (value instanceof Blob) {
 +        headers['content-disposition'] += '; filename="' + fileName + '"';
 +        headers['content-type'] = value.type || 'application/octet-stream';
 +
-         return {...value, headers, fieldName: name};
++        const blob = {
++          uri: value.uri,
++          type: value.type,
++          name: value.name,
++        };
++
++        if (value instanceof Blob) {
++          blob.uri = URL.createObjectURL(value);
+         }
+-        return {...value, headers, fieldName: name};
++
++        return {
++          ...blob,
++          headers,
++          fieldName: name
++        };
        }
        // Convert non-object values to strings as per FormData.append() spec
+       return {string: String(value), headers, fieldName: name};

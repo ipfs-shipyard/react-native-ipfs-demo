@@ -3,15 +3,15 @@ import {View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {useIpfs} from '../../ipfs-http-client';
 
-const addWithString = (client) => async () => {
+const addString = (client) => async () => {
   const file = {
-    path: '/tmp/rn-ipfs-demo.txt',
-    content: 'React Native IPFS Demo',
+    path: '/tmp/rn-ipfs-add-string',
+    content: 'React Native IPFS',
   };
   try {
-    console.log(await client.add(file));
+    console.log('Demo App .add string', {result: await client.add(file)});
   } catch (error) {
-    console.error(error);
+    console.error('Demo App .add string', {error});
   }
 };
 
@@ -20,7 +20,7 @@ const AddScreen = () => {
 
   return (
     <View>
-      <Button mode="contained" onPress={addWithString(client)}>
+      <Button mode="contained" onPress={addString(client)}>
         Add string
       </Button>
     </View>
