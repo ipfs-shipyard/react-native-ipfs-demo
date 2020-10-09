@@ -1,0 +1,189 @@
+diff --git a/node_modules/whatwg-fetch/dist/fetch.umd.js b/node_modules/whatwg-fetch/dist/fetch.umd.js
+index 6c7b313..0403b06 100644
+--- a/node_modules/whatwg-fetch/dist/fetch.umd.js
++++ b/node_modules/whatwg-fetch/dist/fetch.umd.js
+@@ -174,6 +174,7 @@
+   function fileReaderReady(reader) {
+     return new Promise(function(resolve, reject) {
+       reader.onload = function() {
++        console.log('whatwg-fetch fileReaderReady onload', { result: reader.result });
+         resolve(reader.result);
+       };
+       reader.onerror = function() {
+@@ -190,6 +191,7 @@
+   }
+ 
+   function readBlobAsText(blob) {
++    console.log('whatwg-fetch readBlobAsText', {blob});
+     var reader = new FileReader();
+     var promise = fileReaderReady(reader);
+     reader.readAsText(blob);
+@@ -216,10 +218,47 @@
+     }
+   }
+ 
++  function ReadableStreamDefaultReader(body) {
++    this._body = body;
++    this._done = false;
++  }
++
++  ReadableStreamDefaultReader.prototype.read = async function() {
++    if (this._done) {
++      return { done: true, value: undefined };
++    }
++
++    this._done = true;
++
++    const buffer = await this._body.arrayBuffer();
++    const uint8Buffer = new Uint8Array(buffer);
++
++    console.log('whatwg-fetch Reader read', { uint8Buffer });
++
++    return { done: false, value: uint8Buffer };
++  }
++
++  ReadableStreamDefaultReader.prototype.releaseLock = function() {
++
++  }
++
++  ReadableStreamDefaultReader.prototype.cancel = function() {
++    return Promise.resolve();
++  }
++
++  function ReadableStream(body) {
++    this._body = body;
++  }
++
++  ReadableStream.prototype.getReader = function() {
++    return new ReadableStreamDefaultReader(this._body);
++  }
++
+   function Body() {
+     this.bodyUsed = false;
+ 
+     this._initBody = function(body) {
++      console.log('whatwg-fetch Body _initBody', { body });
+       /*
+         fetch-mock wraps the Response object in an ES6 Proxy to
+         provide useful test harness features such as flush. However, on
+@@ -237,8 +276,10 @@
+       } else if (typeof body === 'string') {
+         this._bodyText = body;
+       } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
++        console.log('whatwg-fetch Body _initBody is Blob', { body });
+         this._bodyBlob = body;
+       } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
++        console.log('whatwg-fetch Body _initBody is FormData', { body });
+         this._bodyFormData = body;
+       } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+         this._bodyText = body.toString();
+@@ -249,6 +290,7 @@
+       } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+         this._bodyArrayBuffer = bufferClone(body);
+       } else {
++        console.log('whatwg-fetch', 'body is text (default case)');
+         this._bodyText = body = Object.prototype.toString.call(body);
+       }
+ 
+@@ -256,6 +298,7 @@
+         if (typeof body === 'string') {
+           this.headers.set('content-type', 'text/plain;charset=UTF-8');
+         } else if (this._bodyBlob && this._bodyBlob.type) {
++          console.log('whatwg-fetch set blob content type', { type: this._bodyBlob.type });
+           this.headers.set('content-type', this._bodyBlob.type);
+         } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+           this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+@@ -304,12 +347,16 @@
+     }
+ 
+     this.text = function() {
++      console.log('whatwg-fetch text()', { blob: this._bodyBlob, arrayBuffer: this._bodyArrayBuffer, formData: this._bodyFormData });
++
+       var rejected = consumed(this);
+       if (rejected) {
+         return rejected
+       }
+ 
+       if (this._bodyBlob) {
++        console.log('whatwg-fetch text() is blob');
++
+         return readBlobAsText(this._bodyBlob)
+       } else if (this._bodyArrayBuffer) {
+         return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
+@@ -349,6 +396,8 @@
+     options = options || {};
+     var body = options.body;
+ 
++    console.log('whatwg-fetch Request headers', { headers: options.headers });
++
+     if (input instanceof Request) {
+       if (input.bodyUsed) {
+         throw new TypeError('Already read')
+@@ -438,6 +487,8 @@
+   Body.call(Request.prototype);
+ 
+   function Response(bodyInit, options) {
++    console.log('whatwg-fetch new Response', {bodyInit, options});
++
+     if (!(this instanceof Response)) {
+       throw new TypeError('Please use the "new" operator, this DOM object constructor cannot be called as a function.')
+     }
+@@ -451,6 +502,7 @@
+     this.statusText = 'statusText' in options ? options.statusText : '';
+     this.headers = new Headers(options.headers);
+     this.url = options.url || '';
++    this.body = new ReadableStream(this);
+     this._initBody(bodyInit);
+   }
+ 
+@@ -496,6 +548,8 @@
+   }
+ 
+   function fetch(input, init) {
++    // console.log('whatwg-fetch', { input, init });
++
+     return new Promise(function(resolve, reject) {
+       var request = new Request(input, init);
+ 
+@@ -510,6 +564,7 @@
+       }
+ 
+       xhr.onload = function() {
++        console.log('whatwg-fetch xhr ON LOAD');
+         var options = {
+           status: xhr.status,
+           statusText: xhr.statusText,
+@@ -517,12 +572,16 @@
+         };
+         options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
+         var body = 'response' in xhr ? xhr.response : xhr.responseText;
++
++        console.log('whatwg-fetch xhr on load', {options, body, xhr});
++
+         setTimeout(function() {
+           resolve(new Response(body, options));
+         }, 0);
+       };
+ 
+       xhr.onerror = function() {
++        console.log('fetch xhr ON ERROR');
+         setTimeout(function() {
+           reject(new TypeError('Network request failed'));
+         }, 0);
+@@ -574,6 +633,7 @@
+         });
+       } else {
+         request.headers.forEach(function(value, name) {
++          console.log('whatwg-fetch xhr setRequestHeader', { value, name });
+           xhr.setRequestHeader(name, value);
+         });
+       }
+@@ -589,6 +649,8 @@
+         };
+       }
+ 
++      console.log('whatwg-fetch before xhr.send', { url: request.url, body: request._bodyInit });
++
+       xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit);
+     })
+   }

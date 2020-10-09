@@ -1,3 +1,61 @@
+diff --git a/node_modules/react-native/Libraries/Blob/FileReader.js b/node_modules/react-native/Libraries/Blob/FileReader.js
+index 15a8b44..a407cff 100644
+--- a/node_modules/react-native/Libraries/Blob/FileReader.js
++++ b/node_modules/react-native/Libraries/Blob/FileReader.js
+@@ -81,8 +81,41 @@ class FileReader extends (EventTarget(...READER_EVENTS): any) {
+     }
+   }
+ 
+-  readAsArrayBuffer() {
+-    throw new Error('FileReader.readAsArrayBuffer is not implemented');
++  readAsArrayBuffer(blob: ?Blob) {
++    // throw new Error('FileReader.readAsArrayBuffer is not implemented');
++    this._aborted = false;
++
++    if (blob == null) {
++      throw new TypeError(
++        "Failed to execute 'readAsArrayBuffer' on 'FileReader': parameter 1 is not of type 'Blob'",
++      );
++    }
++
++    NativeFileReaderModule.readAsDataURL(blob.data).then(
++      (text: string) => {
++        if (this._aborted) {
++          return;
++        }
++
++        const bytes = atob(text.split(',')[1]);
++        const buffer = new ArrayBuffer(bytes.length);
++        const view = new Uint8Array(buffer);
++
++        for (let i = 0; i < bytes.length; i++) {
++          view[i] = bytes.charCodeAt(i);
++        }
++
++        this._result = view.buffer;
++        this._setReadyState(DONE);
++      },
++      error => {
++        if (this._aborted) {
++          return;
++        }
++        this._error = error;
++        this._setReadyState(DONE);
++      },
++    );
+   }
+ 
+   readAsDataURL(blob: ?Blob) {
+@@ -126,6 +159,9 @@ class FileReader extends (EventTarget(...READER_EVENTS): any) {
+         if (this._aborted) {
+           return;
+         }
++
++        console.log('ReactNative FileReader NativeFileReaderModule readAsText', { text });
++
+         this._result = text;
+         this._setReadyState(DONE);
+       },
 diff --git a/node_modules/react-native/Libraries/Network/FormData.js b/node_modules/react-native/Libraries/Network/FormData.js
 index bdb1da3..5f3c852 100644
 --- a/node_modules/react-native/Libraries/Network/FormData.js
