@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {Button} from 'react-native-paper';
+import {inspect} from 'util';
 import {useIpfs} from '../../ipfs-http-client';
 
 const addString = (client) => async () => {
@@ -9,7 +10,9 @@ const addString = (client) => async () => {
     content: '邑中陽裏人也，姓劉氏。母媼嘗息大澤之陂，夢與神遇',
   };
   try {
-    console.log('Demo App .add string', {result: await client.add(file)});
+    console.log('Demo App .add string', {
+      result: inspect(await client.add(file)),
+    });
   } catch (error) {
     console.error('Demo App .add string', {error});
   }
@@ -21,7 +24,9 @@ const addUint8Array = (client) => async () => {
     content: Uint8Array.from('123456789'),
   };
   try {
-    console.log('Demo App .add Uint8Array', {result: await client.add(file)});
+    console.log('Demo App .add Uint8Array', {
+      result: inspect(await client.add(file)),
+    });
   } catch (error) {
     console.error('Demo App .add Uint8Array', {error});
   }
@@ -36,7 +41,9 @@ const addUint8Arrays = (client) => async () => {
     ],
   };
   try {
-    console.log('Demo App .add Uint8Arrays', {result: await client.add(file)});
+    console.log('Demo App .add Uint8Arrays', {
+      result: inspect(await client.add(file)),
+    });
   } catch (error) {
     console.error('Demo App .add Uint8Arrays', {error});
   }
@@ -48,7 +55,9 @@ const addNumbers = (client) => async () => {
     content: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   };
   try {
-    console.log('Demo App .add numbers', {result: await client.add(file)});
+    console.log('Demo App .add numbers', {
+      result: inspect(await client.add(file)),
+    });
   } catch (error) {
     console.error('Demo App .add numbers', {error});
   }
@@ -65,7 +74,9 @@ const addBlob = (client) => async () => {
     content: new Blob(['React Native IPFS', view.buffer]),
   };
   try {
-    console.log('Demo App .add blob', {result: await client.add(file)});
+    console.log('Demo App .add blob', {
+      result: inspect(await client.add(file)),
+    });
   } catch (error) {
     console.error('Demo App .add blob', {error});
   }

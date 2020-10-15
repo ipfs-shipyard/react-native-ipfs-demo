@@ -1,4 +1,4 @@
-package com.ipfsdemo;
+package io.ipfs.reactnative.demo;
 
 import com.facebook.react.ReactActivity;
 

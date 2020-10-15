@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ipfsDemo</string>
+    <string name="blob_provider_authority">io.ipfs.reactnative.demo.blobs</string>
 </resources>

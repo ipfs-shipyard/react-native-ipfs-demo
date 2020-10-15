@@ -52,8 +52,20 @@ const HomeScreen = ({navigation}) => {
       <Button mode="contained" onPress={() => navigation.navigate('Id')}>
         ipfs.id()
       </Button>
+      <Button mode="contained" onPress={() => navigation.navigate('Ls')}>
+        ipfs.ls()
+      </Button>
       <Button mode="contained" onPress={() => navigation.navigate('Add')}>
         ipfs.add()
+      </Button>
+      <Button mode="contained" onPress={() => navigation.navigate('Get')}>
+        ipfs.get()
+      </Button>
+      <Button mode="contained" onPress={() => navigation.navigate('Cat')}>
+        ipfs.cat()
+      </Button>
+      <Button mode="contained" onPress={() => navigation.navigate('Pubsub')}>
+        ipfs.pubsub
       </Button>
       <Button mode="contained" onPress={runGenerator}>
         generator

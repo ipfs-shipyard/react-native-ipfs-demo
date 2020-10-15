@@ -12,6 +12,8 @@
   "scripts": {
     "start:ios:debug": "react-native run-ios --configuration Debug --scheme IPFS-Demo-iOS-Debug",
     "start:ios:release": "react-native run-ios --configuration Release --scheme IPFS-Demo-iOS-Release",
+    "start:android:debug": "react-native run-android --variant debug",
+    "start:android:release": "react-native run-android --variant release",
     "start:metro": "react-native start",
     "lint": "eslint .",
     "pods": "pod-install --project-directory=ios",
@@ -27,9 +29,11 @@
     "big-integer": "^1.6.48",
     "events": "^3.2.0",
     "ipfs-http-client": "^46.1.0",
+    "multiaddr": "^8.0.0",
     "punycode": "^2.1.1",
     "react": "^16.9.0",
     "react-native": "0.63.2",
+    "react-native-device-info": "^6.2.0",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-get-random-values": "^1.5.0",
     "react-native-paper": "^4.1.0",
@@ -41,6 +45,7 @@
     "react-native-vector-icons": "^7.0.0",
     "text-encoding": "^0.7.0",
     "util": "^0.12.3",
+    "web-streams-polyfill": "^3.0.0",
     "whatwg-url": "^8.2.1"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-package com.ipfsdemo;
+package io.ipfs.reactnative.demo;
 
 import android.app.Application;
 import android.content.Context;
