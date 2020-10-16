@@ -1,5 +1,5 @@
 diff --git a/node_modules/whatwg-fetch/dist/fetch.umd.js b/node_modules/whatwg-fetch/dist/fetch.umd.js
-index 6c7b313..8462b28 100644
+index 6c7b313..b26df3e 100644
 --- a/node_modules/whatwg-fetch/dist/fetch.umd.js
 +++ b/node_modules/whatwg-fetch/dist/fetch.umd.js
 @@ -24,7 +24,8 @@
@@ -135,7 +135,7 @@ index 6c7b313..8462b28 100644
      this._initBody(bodyInit);
    }
  
-@@ -496,33 +539,50 @@
+@@ -496,33 +539,66 @@
    }
  
    function fetch(input, init) {
@@ -188,9 +188,25 @@ index 6c7b313..8462b28 100644
 -        setTimeout(function() {
 -          resolve(new Response(body, options));
 -        }, 0);
-+        console.log('whatwg-fetch xhr on load');
++        console.log('whatwg-fetch xhr on load', {response: xhr.response});
 +
-+        readableStreamController.close();
++        async function enqueueSingleChunk() {
++          if (xhr.responseType === 'blob') {
++            const bytes = await readBlobAsArrayBuffer(xhr.response);
++
++            // console.log('whatwg-fetch xhr on load enqueueSingleChunk', { bytes });
++
++            readableStreamController.enqueue(bytes);
++          }
++
++          if (xhr.responseType === 'arraybuffer') {
++            readableStreamController.enqueue(new Uint8Array(xhr.response));
++          }
++  
++          readableStreamController.close();
++        }
++
++        enqueueSingleChunk();
        };
  
        xhr.onerror = function() {
@@ -198,7 +214,7 @@ index 6c7b313..8462b28 100644
          setTimeout(function() {
            reject(new TypeError('Network request failed'));
          }, 0);
-@@ -534,11 +594,56 @@
+@@ -534,11 +610,56 @@
          }, 0);
        };
  
@@ -219,11 +235,11 @@ index 6c7b313..8462b28 100644
 +        // const uint8Buffer = new Uint8Array(readBlobAsArrayBuffer(xhr.response));
 +        // console.log('whatwg-fetch xhr on progress', { uint8Buffer });
 +
-+        if (canceled) {
++        if (canceled || xhr.responseType !== 'text') {
 +          return;
 +        };
 +
-+        const chunk = xhr.response.substr(responseTextOffset);
++        const chunk = xhr.response.substring(responseTextOffset);
 +
 +        responseTextOffset = xhr.response.length;
 +
@@ -260,7 +276,7 @@ index 6c7b313..8462b28 100644
  
        function fixUrl(url) {
          try {
-@@ -556,17 +661,19 @@
+@@ -556,16 +677,23 @@
          xhr.withCredentials = false;
        }
  
@@ -274,7 +290,6 @@ index 6c7b313..8462b28 100644
 -        ) {
 -          xhr.responseType = 'arraybuffer';
 -        }
--      }
 +      // if ('responseType' in xhr) {
 +      //   if (support.blob) {
 +      //     xhr.responseType = 'blob';
@@ -287,11 +302,15 @@ index 6c7b313..8462b28 100644
 +      //   }
 +      // }
 +
-+      xhr.responseType = 'text';
++      xhr.responseType = 'arraybuffer';
++      const contentTypeHeader = request.headers?.get('Content-Type');
++
++      if (contentTypeHeader && contentTypeHeader.indexOf('application/octet-stream') !== -1) {
++        xhr.responseType = 'text';
+       }
  
        if (init && typeof init.headers === 'object' && !(init.headers instanceof Headers)) {
-         Object.getOwnPropertyNames(init.headers).forEach(function(name) {
-@@ -574,20 +681,23 @@
+@@ -574,20 +702,23 @@
          });
        } else {
          request.headers.forEach(function(value, name) {

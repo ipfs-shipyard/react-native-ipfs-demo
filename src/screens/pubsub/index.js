@@ -43,6 +43,9 @@ const PubsubScreen = () => {
     try {
       await pubsub.subscribe(TOPIC, handleMessage, {
         onError: handleError,
+        headers: {
+          'Content-Type': 'application/octet-stream',
+        },
       });
 
       console.log('Demo App .pubsub subscribe', {topic: TOPIC});

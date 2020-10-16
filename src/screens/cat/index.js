@@ -13,7 +13,7 @@ const CatScreen = () => {
     try {
       const chunks = [];
       for await (const chunk of client.cat(CID)) {
-        console.log('Demo App .cat', {chunk});
+        console.log('Demo App .cat', {chunk, type: typeof chunk});
         chunks.push(chunk);
       }
       const buffer = chunks.reduce((acc, chunk) => [...acc, ...chunk], []);
