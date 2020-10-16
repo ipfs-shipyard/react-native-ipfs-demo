@@ -9,11 +9,9 @@ This repository:
 
 ## Usage
 
-Spawn a local IPFS node with the `daemon` command. The app assumes the node is avaiable at http://localhost:5002.
+Spawn a local IPFS node with the `daemon` command. The app assumes the node is available at http://localhost:5002.
 
 ### Run the app on Android
-
-TODO add instructions on how to setup `adb forward` to allow an Android device to connect to localhost.
 
 ```sh
 npm run start:android:debug
@@ -21,6 +19,16 @@ npm run start:android:debug
 ```sh
 npm run start:android:release
 ```
+
+**Note:** While in development, to connect to an IPFS daemon running at localhost:5002, run the following command:
+
+```sh
+adb reverse tcp:5002 tcp:5002
+```
+
+Sources:
+- https://reactnative.dev/docs/running-on-device#method-1-using-adb-reverse-recommended
+- https://stackoverflow.com/questions/33704130/react-native-android-fetch-failing-on-connection-to-local-api/43277765#43277765
 
 ### Run the app on iOS
 
@@ -83,3 +91,18 @@ The [Node.js implementation](https://github.com/ipfs/js-ipfs/blob/3ff833db6444a3
 
 It's also worth noting that `nanoid` does not work out of the box in React Native because there is no built-in secure random generator. The recommended go to [solution](https://github.com/ai/nanoid/blob/a3770f1d80dc23220bd51a87a27acedf85a3050f/index.browser.js#L13) is to polyfill `crypto.getRandomValues` global natively with [`react-native-get-random-values`](https://github.com/LinusU/react-native-get-random-values) as soon as the app starts. A solution such as [`react-native-crypto`](https://github.com/tradle/react-native-crypto) might work as well, but it's probably overkill for this sole purpose as it offers much more cryptographic functions beyond what `nanoid` requires.
 
+### [ipfs.get](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/FILES.md#ipfsgetipfspath-options)
+
+Works the the fixed made for `ipfs.add`.
+
+### [ipfs.cat](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/FILES.md#ipfscatipfspath-options)
+
+Works the the fixed made for `ipfs.add`.
+
+### [ipfs.pubsub](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/PUBSUB.md) and [ipfs.swarm](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/SWARM.md)
+
+For pubsub, subscriptions operate on the basis of a long-running HTTP response, i.e., an endless stream. As React Native does not support returning a `ReadableStream` natively nor provide access to the underlying byte-stream (only base64 can be read through the bridge), so we have to fallback to `XMLHttpRequest`. React Native's XHR provides [progress events](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/progress_event) which buffers text allows us to concatenate a response by encoding it into its UTF-8 byte representation using the `TextEncoder` API. Although [very inefficient](https://github.com/jonnyreeves/fetch-readablestream/blob/cabccb98788a0141b001e6e775fc7fce87c62081/src/defaultTransportFactory.js#L33), it's some of sort of pseudo-streaming that works. The problem, however, is that we're reading text and not raw binary data so this may be a shortcoming for some use cases. Pubsub subcriptions are currently base64 encoded, so we should be fine for now in that regard.
+
+To make pubsub subscriptions work, we have polyfilled [`ReadableStream`](https://github.com/MattiasBuelens/web-streams-polyfill) and integrated the stream's controller with XHR's progress events in React Native's [`fetch` implementation](patches/react-native+0.63.2.patch). It's important to note that progress events only work when [`XMLHttpRequest.responseType`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType) is set to `text`. If you wish to process raw binary data, either `blob` or `arraybuffer` has to be used. In this case, the response is read as a whole, when the load event is fired, and enqueuedto the stream's controller as single chunk. We're currently using `Content-Type` header to selectively determine whether `text` or other response type should be used, but we probably should find another way to do this.
+
+Other HTTP client methods continue to work as expected after these changes, on both iOS and Android.
