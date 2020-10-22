@@ -19,7 +19,9 @@
     "pods": "pod-install --project-directory=ios",
     "xcode": "xed -b ios",
     "studio": "studio android",
-    "postinstall": "npm run pods && patch-package"
+    "patch:ipfs": "patch-package --patch-dir patches/ipfs",
+    "patch:rn": "patch-package --patch-dir node_modules/react-native-polyfill-globals/patches",
+    "postinstall": "npm run pods && npm run patch:ipfs && npm run patch:rn"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
@@ -37,6 +39,7 @@
     "react-native-gesture-handler": "^1.7.0",
     "react-native-get-random-values": "^1.5.0",
     "react-native-paper": "^4.1.0",
+    "react-native-polyfill-globals": "^1.0.4",
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.7",
     "react-native-safe-area-view": "^1.1.1",
