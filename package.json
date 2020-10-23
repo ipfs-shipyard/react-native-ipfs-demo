@@ -20,7 +20,7 @@
     "xcode": "xed -b ios",
     "studio": "studio android",
     "patch:ipfs": "patch-package --patch-dir patches/ipfs",
-    "patch:rn": "patch-package --patch-dir node_modules/react-native-polyfill-globals/patches",
+    "patch:rn": "patch-package --patch-dir patches/react-native",
     "postinstall": "npm run pods && npm run patch:ipfs && npm run patch:rn"
   },
   "dependencies": {
