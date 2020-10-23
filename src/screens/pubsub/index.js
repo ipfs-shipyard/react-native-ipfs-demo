@@ -1,7 +1,6 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {Button} from 'react-native-paper';
-import {inspect} from 'util';
 import multiaddr from 'multiaddr';
 import {useIpfs} from '../../ipfs-http-client';
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
 import {Button} from 'react-native-paper';
-import {inspect} from 'util';
 import {useIpfs} from '../../ipfs-http-client';
 
 const CatScreen = () => {
