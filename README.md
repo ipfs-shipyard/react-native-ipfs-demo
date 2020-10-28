@@ -106,3 +106,7 @@ For pubsub, subscriptions operate on the basis of a long-running HTTP response, 
 To make pubsub subscriptions work, we have polyfilled [`ReadableStream`](https://github.com/MattiasBuelens/web-streams-polyfill) and integrated the stream's controller with XHR's progress events in React Native's [`fetch` implementation](patches/react-native+0.63.2.patch). It's important to note that progress events only work when [`XMLHttpRequest.responseType`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType) is set to `text`. If you wish to process raw binary data, either `blob` or `arraybuffer` has to be used. In this case, the response is read as a whole, when the load event is fired, and enqueued to the stream's controller as single chunk. We're currently using `Content-Type` header to selectively determine whether `text` or other response type should be used, but we probably should find another way to do this.
 
 Other HTTP client methods continue to work as expected after these changes, on both iOS and Android.
+
+## Related
+
+- [react-native-polyfill-globals](https://github.com/acostalima/react-native-polyfill-globals) - Polyfills and patches missing or partially supported web and core APIs.
