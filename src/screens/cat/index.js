@@ -8,6 +8,7 @@ const CatScreen = () => {
 
   const cat = async () => {
     const CID = 'QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB';
+    // const CID = 'QmT7K3bzwTPy885P46nnEfp5big3mWU8QLwmbtukaEPgwf';
 
     try {
       const chunks = [];

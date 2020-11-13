@@ -104,7 +104,7 @@ index ba712e0..46ddf0a 100644
  
  module.exports = multipartRequest
 diff --git a/node_modules/ipfs-http-client/src/pubsub/subscribe.js b/node_modules/ipfs-http-client/src/pubsub/subscribe.js
-index ab5ee3c..f6216b8 100644
+index ab5ee3c..119b4ba 100644
 --- a/node_modules/ipfs-http-client/src/pubsub/subscribe.js
 +++ b/node_modules/ipfs-http-client/src/pubsub/subscribe.js
 @@ -13,6 +13,8 @@ module.exports = configure((api, options) => {
@@ -116,7 +116,19 @@ index ab5ee3c..f6216b8 100644
      let done
      let fail
  
-@@ -47,9 +49,12 @@ module.exports = configure((api, options) => {
+@@ -34,7 +36,10 @@ module.exports = configure((api, options) => {
+           arg: topic,
+           ...options
+         }),
+-        headers: options.headers
++        headers: options.headers,
++        reactNative: {
++          textStreaming: true
++        }
+       })
+         .catch((err) => {
+           // Initial subscribe fail, ensure we clean up
+@@ -47,9 +52,12 @@ module.exports = configure((api, options) => {
  
            if (!response) {
              // if there was no response, the subscribe failed
@@ -129,7 +141,7 @@ index ab5ee3c..f6216b8 100644
            readMessages(response.ndjson(), {
              onMessage: handler,
              onEnd: () => subsTracker.unsubscribe(topic, handler),
-@@ -67,6 +72,8 @@ module.exports = configure((api, options) => {
+@@ -67,6 +75,8 @@ module.exports = configure((api, options) => {
  async function readMessages (msgStream, { onMessage, onEnd, onError }) {
    onError = onError || log
  
@@ -138,7 +150,7 @@ index ab5ee3c..f6216b8 100644
    try {
      for await (const msg of msgStream) {
        try {
-@@ -74,6 +81,8 @@ async function readMessages (msgStream, { onMessage, onEnd, onError }) {
+@@ -74,6 +84,8 @@ async function readMessages (msgStream, { onMessage, onEnd, onError }) {
            continue
          }
  
@@ -147,11 +159,11 @@ index ab5ee3c..f6216b8 100644
          onMessage({
            from: uint8ArrayToString(uint8ArrayFromString(msg.from, 'base64pad'), 'base58btc'),
            data: uint8ArrayFromString(msg.data, 'base64pad'),
-@@ -86,6 +95,7 @@ async function readMessages (msgStream, { onMessage, onEnd, onError }) {
+@@ -86,6 +98,7 @@ async function readMessages (msgStream, { onMessage, onEnd, onError }) {
        }
      }
    } catch (err) {
-+    console.error('ipfs-http-client readMessages error', {error});
++    console.error('ipfs-http-client readMessages error', {err});
      // FIXME: In testing with Chrome, err.type is undefined (should not be!)
      // Temporarily use the name property instead.
      if (err.type !== 'aborted' && err.name !== 'AbortError') {

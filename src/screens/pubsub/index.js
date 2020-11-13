@@ -10,7 +10,6 @@ const ADDR = multiaddr(
 );
 
 const handleMessage = (msg) => console.log('Demo app .pubsub message', {msg});
-
 const handleError = (error) => console.log('Demo app .pubsub error', {error});
 
 const PubsubScreen = () => {
@@ -42,9 +41,6 @@ const PubsubScreen = () => {
     try {
       await pubsub.subscribe(TOPIC, handleMessage, {
         onError: handleError,
-        headers: {
-          'Content-Type': 'application/octet-stream',
-        },
       });
 
       console.log('Demo App .pubsub subscribe', {topic: TOPIC});

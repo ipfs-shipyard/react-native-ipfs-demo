@@ -82,8 +82,9 @@ Another issue we uncovered is that `FormData` does not know how to handle `Blob`
 
 #### FileReader
 
-Judging by our experiments, response bodies in React Native appear to always be of blob type. As such, in order to `whatwg-fetch`'s `Response.arrayBuffer()` to work, we had to implement [`FileReader.readAsArrayBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsArrayBuffer) which React Native [does not](https://github.com/facebook/react-native/blob/0b9ea60b4fee8cacc36e7160e31b91fc114dbc0d/Libraries/Blob/FileReader.js#L84) at the moment. In order to get the raw binary data from the blob, we had to read it as a data URL and decode with `atob` which had to be polyfilled with the `base-64` package since it does not exist in the React Native environment. 
-You can find the changes we have made in the [patch](patches/react-native+0.63.2.patch) provided.
+Judging by our experiments, response bodies in React Native appear to always be of blob type. As such, in order to `whatwg-fetch`'s `Response.arrayBuffer()` to work, we had to implement [`FileReader.readAsArrayBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsArrayBuffer) which React Native [does not](https://github.com/facebook/react-native/blob/0b9ea60b4fee8cacc36e7160e31b91fc114dbc0d/Libraries/Blob/FileReader.js#L84) at the moment. In order to get the raw binary data from the blob, we had to read it as a data URL and decode with `atob` which had to be polyfilled with the `base-64` package since it does not exist in the React Native environment.
+
+~~You can find the changes we have made in the [patch](patches/react-native+0.63.2.patch) provided.~~ Now provided by `react-native-polyfill-globals`.
 
 #### Node.js implementation (not being used)
 
@@ -93,20 +94,27 @@ It's also worth noting that `nanoid` does not work out of the box in React Nativ
 
 ### [ipfs.get](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/FILES.md#ipfsgetipfspath-options)
 
-Works the the fixed made for `ipfs.add`.
+Works with the fixes made for `ipfs.add`.
 
 ### [ipfs.cat](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/FILES.md#ipfscatipfspath-options)
 
-Works the the fixed made for `ipfs.add`.
+Works with the fixes made for `ipfs.add`.
 
 ### [ipfs.pubsub](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/PUBSUB.md) and [ipfs.swarm](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/SWARM.md)
 
 For pubsub, subscriptions operate on the basis of a long-running HTTP response, i.e., an endless stream. As React Native does not support returning a `ReadableStream` natively nor provide access to the underlying byte-stream (only base64 can be read through the bridge), so we have to fallback to `XMLHttpRequest`. React Native's XHR provides [progress events](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/progress_event) which buffers text allows us to concatenate a response by encoding it into its UTF-8 byte representation using the `TextEncoder` API. Although [very inefficient](https://github.com/jonnyreeves/fetch-readablestream/blob/cabccb98788a0141b001e6e775fc7fce87c62081/src/defaultTransportFactory.js#L33), it's some of sort of pseudo-streaming that works. The problem, however, is that we're reading text and not raw binary data so this may be a shortcoming for some use cases. Pubsub subcriptions are currently base64 encoded, so we should be fine for now in that regard.
 
-To make pubsub subscriptions work, we have polyfilled [`ReadableStream`](https://github.com/MattiasBuelens/web-streams-polyfill) and integrated the stream's controller with XHR's progress events in React Native's [`fetch` implementation](patches/react-native+0.63.2.patch). It's important to note that progress events only work when [`XMLHttpRequest.responseType`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType) is set to `text`. If you wish to process raw binary data, either `blob` or `arraybuffer` has to be used. In this case, the response is read as a whole, when the load event is fired, and enqueued to the stream's controller as single chunk. We're currently using `Content-Type` header to selectively determine whether `text` or other response type should be used, but we probably should find another way to do this.
+To make pubsub subscriptions work, we have polyfilled [`ReadableStream`](https://github.com/MattiasBuelens/web-streams-polyfill) and integrated the stream's controller with XHR's progress events in React Native's [`fetch` implementation](patches/react-native+0.63.2.patch). It's important to note that progress events only work when [`XMLHttpRequest.responseType`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType) is set to `text`. If you wish to process raw binary data, either `blob` or `arraybuffer` has to be used. In this case, the response is read as a whole, when the load event is fired, and enqueued to the stream's controller as single chunk. 
 
 Other HTTP client methods continue to work as expected after these changes, on both iOS and Android.
+
+## Fetch API for React Native (13 November 2020)
+
+Instead of using `whatwg-fetch`, this repository is now using `@react-native-community/fetch` which is JavaScript implementation of the Fetch API built on top of React Native's low-level networking primitives. It does not rely on `XMLHttpRequest` but instead on `RCTNetworking`. It also implements `Response.body` and adds support for text streaming via native incremental data events.
+
+**NOTE**: `@react-native-community/fetch` is not yet published and being worked on.
 
 ## Related
 
 - [react-native-polyfill-globals](https://github.com/acostalima/react-native-polyfill-globals) - Polyfills and patches missing or partially supported web and core APIs.
+- [@react-native-community/fetch](https://github.com/react-native-community/fetch) - A Fetch API polyfill for React Native with text streaming support built on top of React Native's low-level Networking API.
