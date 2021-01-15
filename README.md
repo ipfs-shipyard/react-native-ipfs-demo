@@ -58,9 +58,9 @@ Feel free to tweak the parameters (CIDs, multiaddr, etc.) for each HTTP client m
 
 The environment must be [polyfilled](#shims/index.js) right when your app starts and before anything is rendered.
 
-### Alternative fetch API for React Native
+### Alternative fetch polyfill
 
-Instead of using the fetch implemention that [ships](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network/fetch.js) with React Native, which is provided by [GitHub's fetch polyfill](https://github.com/github/fetch), this demo is now using `@react-native-community/fetch`. It implements `Response.body` to add support for text streaming via native incremental data events.
+Instead of using the fetch implementation that [ships](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network/fetch.js) with React Native, which is provided by [GitHub's fetch polyfill](https://github.com/github/fetch), this demo is now using `@react-native-community/fetch`. It implements `Response.body` to add support for text streaming via native incremental data events.
 
 **NOTE**: The v1.0.0 release of `@react-native-community/fetch` is not yet published.
 ## Known issues and limitations
