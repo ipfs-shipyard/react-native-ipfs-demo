@@ -53,8 +53,9 @@ You need to change the input URLs for the HTTP client factory on both Android an
 Feel free to tweak the parameters (CIDs, multiaddr, etc.) for each HTTP client method by editing the corresponding code in each [screen](#src/screens).
 ## Requirements to use HTTP client
 
-- Install [react-native-polyfill-globals](https://github.com/acostalima/react-native-polyfill-globals) - Polyfills and patches missing or partially supported web and core APIs.
-- Install [@react-native-community/fetch](https://github.com/react-native-community/fetch) - A fetch API polyfill for React Native with text streaming support built on top of React Native's [Networking API](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network).
+- [react-native-polyfill-globals](https://github.com/acostalima/react-native-polyfill-globals) - Polyfills and patches missing or partially supported web and core APIs.
+- [@react-native-community/fetch](https://github.com/react-native-community/fetch) - A fetch API polyfill for React Native with text streaming support built on top of React Native's [Networking API](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network).
+- [@babel/plugin-proposal-async-generator-functions](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-async-generator-functions)
 
 The environment must be [polyfilled](#shims/index.js) right when your app starts and before anything is rendered.
 
