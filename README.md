@@ -51,19 +51,18 @@ In order connect to the IPFS node running on your development machine when runni
 You need to change the input URLs for the HTTP client factory on both Android and iOS, you can do so by editing [config.js](#config.js) file.
 
 Feel free to tweak the parameters (CIDs, multiaddr, etc.) for each HTTP client method by editing the corresponding code in each [screen](#src/screens).
-
-## Alternative fetch API for React Native (13 November 2020)
-
-Instead of using the fetch implemention that [ships](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network/fetch.js) with React Native, which is provided by [GitHub's fetch polyfill](https://github.com/github/fetch), this demo is now using `@react-native-community/fetch`. It implements `Response.body` to add support for text streaming via native incremental data events.
-
-**NOTE**: The v1.0.0 release of `@react-native-community/fetch` is not yet published.
-
 ## Requirements to use HTTP client
 
 - Install [react-native-polyfill-globals](https://github.com/acostalima/react-native-polyfill-globals) - Polyfills and patches missing or partially supported web and core APIs.
 - Install [@react-native-community/fetch](https://github.com/react-native-community/fetch) - A fetch API polyfill for React Native with text streaming support built on top of React Native's [Networking API](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network).
 
-The environment must be [polyfilled](#shims/index.js) with missing APIs and functionality right when your app starts and before anything is rendered.
+The environment must be [polyfilled](#shims/index.js) right when your app starts and before anything is rendered.
+
+### Alternative fetch API for React Native
+
+Instead of using the fetch implemention that [ships](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network/fetch.js) with React Native, which is provided by [GitHub's fetch polyfill](https://github.com/github/fetch), this demo is now using `@react-native-community/fetch`. It implements `Response.body` to add support for text streaming via native incremental data events.
+
+**NOTE**: The v1.0.0 release of `@react-native-community/fetch` is not yet published.
 ## Known issues and limitations
 
 - It's not possible to create `Blob`s from `ArrayBuffer`s and `ArrayBufferView`s.
