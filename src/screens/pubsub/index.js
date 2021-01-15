@@ -4,9 +4,9 @@ import {Button} from 'react-native-paper';
 import multiaddr from 'multiaddr';
 import {useIpfs} from '../../ipfs-http-client';
 
-const TOPIC = 'react-native-demo';
+const TOPIC = 'react-native-ipfs-demo';
 const ADDR = multiaddr(
-  '/ip4/127.0.0.1/tcp/4002/p2p/QmVxjzyvjNHLtupTX7P1ELZFn4y9KugkP18BU1yA2ppNK8',
+  '/ip4/147.75.100.9/tcp/4001/p2p/Qmbut9Ywz9YEDrz8ySBSgWyJk41Uvm2QJPhwDJzJyGFsD6',
 );
 
 const handleMessage = (msg) => console.log('Demo app .pubsub message', {msg});
@@ -19,6 +19,8 @@ const PubsubScreen = () => {
 
   const connect = async () => {
     try {
+      console.log('Demo App .pubsub start');
+
       await swarm.connect(ADDR);
 
       console.log('Demo App .pubsub connect', {addr: ADDR});
@@ -29,6 +31,8 @@ const PubsubScreen = () => {
 
   const disconnect = async () => {
     try {
+      console.log('Demo App .disconnect start');
+
       await swarm.disconnect(ADDR);
 
       console.log('Demo App .pubsub disconnect', {addr: ADDR});
@@ -39,6 +43,8 @@ const PubsubScreen = () => {
 
   const subscribe = async () => {
     try {
+      console.log('Demo App .pubsub subscribe start');
+
       await pubsub.subscribe(TOPIC, handleMessage, {
         onError: handleError,
       });
@@ -51,6 +57,8 @@ const PubsubScreen = () => {
 
   const unsubscribe = async () => {
     try {
+      console.log('Demo App .pubsub unsubscribe start');
+
       await pubsub.unsubscribe(TOPIC, handleMessage);
 
       console.log('Demo App .pubsub unsubscribe', {topic: TOPIC});
@@ -61,6 +69,8 @@ const PubsubScreen = () => {
 
   const publish = async () => {
     try {
+      console.log('Demo App .pubsub publish start');
+
       const msg = new TextEncoder().encode('hello');
       await pubsub.publish(TOPIC, msg);
 

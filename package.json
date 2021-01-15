@@ -5,33 +5,29 @@
   "private": true,
   "author": "André Costa Lima <andreclima.pt@gmail.com>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:ipfs-shipyard/react-native-ipfs-demo"
-  },
+  "repository": "ipfs-shipyard/react-native-ipfs-demo",
   "scripts": {
-    "start:ios:debug": "react-native run-ios --configuration Debug --scheme IPFS-Demo-iOS-Debug",
-    "start:ios:release": "react-native run-ios --configuration Release --scheme IPFS-Demo-iOS-Release",
-    "start:android:debug": "react-native run-android --variant debug",
-    "start:android:release": "react-native run-android --variant release",
-    "start:metro": "react-native start",
-    "lint": "eslint --cache --ignore-path .gitignore *.js",
-    "pods": "pod-install --project-directory=ios",
+    "ios:debug": "react-native run-ios --configuration Debug --scheme IPFS-Demo-iOS-Debug",
+    "ios:release": "react-native run-ios --configuration Release --scheme IPFS-Demo-iOS-Release",
+    "android:debug": "react-native run-android --variant debug",
+    "android:release": "react-native run-android --variant release",
+    "metro": "react-native start",
+    "lint": "eslint --cache --ignore-path .gitignore .",
+    "pods": "pod-install",
     "xcode": "xed -b ios",
     "studio": "studio android",
-    "patch:ipfs": "patch-package --patch-dir patches/ipfs",
     "patch:rn": "patch-package --patch-dir node_modules/react-native-polyfill-globals/patches",
-    "postinstall": "npm run pods && npm run patch:ipfs && npm run patch:rn"
+    "postinstall": "npm run pods && npm run patch:rn"
   },
   "dependencies": {
     "@react-native-community/fetch": "file:react-native-community-fetch-1.0.0.tgz",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
-    "ipfs-http-client": "^46.1.0",
-    "multiaddr": "^8.0.0",
+    "ipfs-http-client": "^48.2.0",
+    "multiaddr": "^8.1.2",
     "react": "^16.9.0",
-    "react-native": "^0.63.3",
+    "react-native": "^0.63.4",
     "react-native-device-info": "^6.2.0",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-paper": "^4.1.0",
@@ -52,9 +48,6 @@
     "metro-react-native-babel-preset": "^0.59.0",
     "patch-package": "^6.2.2",
     "pod-install": "^0.1.10"
-  },
-  "jest": {
-    "preset": "react-native"
   },
   "optionalDependencies": {
     "ios-deploy": "^1.11.1"

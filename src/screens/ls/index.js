@@ -11,6 +11,7 @@ const LsScreen = () => {
     const CID = 'QmfGBRT6BbWJd7yUc2uYdaUZJBbnEFvTqehPFoSMQ6wgdr';
 
     try {
+      console.log('Demo App .ls start');
       for await (const file of client.ls(CID)) {
         console.log('Demo App .ls', {file: inspect(file)});
       }

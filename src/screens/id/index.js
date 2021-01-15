@@ -9,6 +9,7 @@ const IdScreen = () => {
 
   const id = async () => {
     try {
+      console.log('Demo App .id start');
       console.log('Demo App .id', {result: inspect(await client.id())});
     } catch (error) {
       console.error('Demo App .id', {error});

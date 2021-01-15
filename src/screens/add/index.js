@@ -5,6 +5,8 @@ import {inspect} from 'util';
 import {useIpfs} from '../../ipfs-http-client';
 
 const addString = (client) => async () => {
+  console.log('Demo App .add string start');
+
   const file = {
     path: '/tmp/rn-ipfs-add-string',
     content: '邑中陽裏人也，姓劉氏。母媼嘗息大澤之陂，夢與神遇',
@@ -19,6 +21,8 @@ const addString = (client) => async () => {
 };
 
 const addUint8Array = (client) => async () => {
+  console.log('Demo App .add string start');
+
   const file = {
     path: '/tmp/rn-ipfs-add-uint8array',
     content: Uint8Array.from('123456789'),
@@ -33,6 +37,8 @@ const addUint8Array = (client) => async () => {
 };
 
 const addUint8Arrays = (client) => async () => {
+  console.log('Demo App .add Uint8Arrays start');
+
   const file = {
     path: '/tmp/rn-ipfs-add-uint8arrays',
     content: [
@@ -50,6 +56,8 @@ const addUint8Arrays = (client) => async () => {
 };
 
 const addNumbers = (client) => async () => {
+  console.log('Demo App .add numbers start');
+
   const file = {
     path: '/tmp/rn-ipfs-add-numbers',
     content: [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -64,6 +72,8 @@ const addNumbers = (client) => async () => {
 };
 
 const addBlob = (client) => async () => {
+  console.log('Demo App .add blob start');
+
   const buffer = new ArrayBuffer(9);
   const view = new Uint8Array(buffer);
 

@@ -10,6 +10,8 @@ const GetScreen = () => {
   const get = async () => {
     const CID = 'QmfGBRT6BbWJd7yUc2uYdaUZJBbnEFvTqehPFoSMQ6wgdr';
     try {
+      console.log('Demo App .get start');
+
       for await (const file of client.get(CID)) {
         if (!file.content) {
           continue;

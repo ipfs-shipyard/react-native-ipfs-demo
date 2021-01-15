@@ -1,21 +1,11 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import createIpfsHttpClient from 'ipfs-http-client';
-import deviceInfo from 'react-native-device-info';
+import {HTTP_CLIENT_URL} from './config';
 
 const IpfsHttpClientContext = createContext();
 
 const Provider = ({children}) => {
-  const [client, setClient] = useState();
-
-  useEffect(() => {
-    deviceInfo.isEmulator().then((isEmulator) => {
-      setClient(
-        createIpfsHttpClient(
-          isEmulator ? 'http://localhost:5002' : 'http://192.168.1.126:5002',
-        ),
-      );
-    });
-  }, []);
+  const [client] = useState(createIpfsHttpClient(HTTP_CLIENT_URL));
 
   return (
     <IpfsHttpClientContext.Provider value={{client}}>
