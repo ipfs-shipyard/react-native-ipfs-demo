@@ -48,16 +48,16 @@ In order connect to the IPFS node running on your development machine when runni
 
 ### Configuration
 
-You need to change the input URLs for the HTTP client factory on both Android and iOS, you can do so by editing [config.js](#config.js) file.
+If you need to change the input URLs for the HTTP client factory on both Android and iOS, you can do so by editing [config.js](config.js) file.
 
-Feel free to tweak the parameters (CIDs, multiaddr, etc.) for each HTTP client method by editing the corresponding code in each [screen](#src/screens).
+Feel free to tweak the parameters (CIDs, multiaddr, etc.) for each HTTP client method by editing the corresponding code in each [screen](src/screens).
 ## Requirements to use HTTP client
 
 - [react-native-polyfill-globals](https://github.com/acostalima/react-native-polyfill-globals) - Polyfills and patches missing or partially supported web and core APIs.
 - [@react-native-community/fetch](https://github.com/react-native-community/fetch) - A fetch API polyfill for React Native with text streaming support built on top of React Native's [Networking API](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network).
 - [@babel/plugin-proposal-async-generator-functions](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-async-generator-functions)
 
-The environment must be [polyfilled](#shims/index.js) right when your app starts and before anything is rendered.
+The environment must be [polyfilled](shims/index.js) right when your app starts and before anything is rendered.
 
 ### Alternative fetch polyfill
 
