@@ -17,7 +17,8 @@
     "xcode": "xed -b ios",
     "studio": "studio android",
     "patch:rn": "patch-package --patch-dir node_modules/react-native-polyfill-globals/patches",
-    "postinstall": "npm run pods && npm run patch:rn"
+    "patch:ipfs": "patch-package --patch-dir patches/ipfs",
+    "postinstall": "npm run pods && npm run patch:rn && npm run patch:ipfs"
   },
   "dependencies": {
     "@react-native-community/fetch": "file:react-native-community-fetch-1.0.0.tgz",

@@ -1,0 +1,16 @@
+diff --git a/node_modules/ipfs-http-client/src/pubsub/subscribe.js b/node_modules/ipfs-http-client/src/pubsub/subscribe.js
+index ab5ee3c..6f369f2 100644
+--- a/node_modules/ipfs-http-client/src/pubsub/subscribe.js
++++ b/node_modules/ipfs-http-client/src/pubsub/subscribe.js
+@@ -34,7 +34,10 @@ module.exports = configure((api, options) => {
+           arg: topic,
+           ...options
+         }),
+-        headers: options.headers
++        headers: options.headers,
++        reactNative: {
++          textStreaming: true,
++        }
+       })
+         .catch((err) => {
+           // Initial subscribe fail, ensure we clean up
