@@ -48,7 +48,7 @@ In order connect to the IPFS node running on your development machine when runni
 
 ### Configuration
 
-If you need to change the input URLs for the HTTP client factory on both Android and iOS, you can do so by editing [config.js](config.js) file.
+If you need to change the input URLs for the HTTP client factory on both Android and iOS, you can do so by editing [config.js](src/config.js) file.
 
 Feel free to tweak the parameters (CIDs, multiaddr, etc.) for each HTTP client method by editing the corresponding code in each [screen](src/screens).
 ## Requirements to use HTTP client
