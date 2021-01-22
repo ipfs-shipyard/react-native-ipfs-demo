@@ -67,7 +67,7 @@ Instead of using the fetch implementation that [ships](https://github.com/facebo
 ## Known issues and limitations
 
 - It's not possible to create `Blob`s from `ArrayBuffer`s and `ArrayBufferView`s.
-    - Source: https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Blob/BlobManager.js. 
+    - Source: https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Blob/BlobManager.js#L75. 
 - In debug mode, an error screen is always displayed every time `console.error` or `console.error` functions are called.
     - Track: https://github.com/facebook/react-native/issues/30378
 - Support for missing core functionality or features required by the HTTP client to operate is added by [react-native-polyfill-globals](https://github.com/acostalima/react-native-polyfill-globals). Confer the [patch](https://github.com/acostalima/react-native-polyfill-globals/blob/master/patches/react-native%2B0.63.3.patch) file.
