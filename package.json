@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Demo of JS IPFS running in React Native for Android and iOS.",
   "private": true,
-  "author": "André Costa Lima <andreclima.pt@gmail.com>",
+  "author": {
+    "name": "André Costa Lima",
+    "email": "andreclima.pt@gmail.com",
+    "url": "https://github.com/acostalima/"
+  },
   "license": "MIT",
   "repository": "ipfs-shipyard/react-native-ipfs-demo",
   "scripts": {
@@ -21,7 +25,6 @@
     "postinstall": "npm run pods && npm run patch:rn && npm run patch:ipfs"
   },
   "dependencies": {
-    "@react-native-community/fetch": "file:react-native-community-fetch-1.0.0.tgz",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
@@ -31,9 +34,10 @@
     "react": "^16.9.0",
     "react-native": "^0.63.4",
     "react-native-device-info": "^6.2.0",
+    "react-native-fetch-api": "^1.0.1",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-paper": "^4.1.0",
-    "react-native-polyfill-globals": "^2.0.0",
+    "react-native-polyfill-globals": "^3.0.0",
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.7",
     "react-native-safe-area-view": "^1.1.1",
