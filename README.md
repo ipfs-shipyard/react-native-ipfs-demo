@@ -54,16 +54,15 @@ Feel free to tweak the parameters (CIDs, multiaddr, etc.) for each HTTP client m
 ## Requirements to use HTTP client
 
 - [react-native-polyfill-globals](https://github.com/acostalima/react-native-polyfill-globals) - Polyfills and patches missing or partially supported web and core APIs.
-- [@react-native-community/fetch](https://github.com/react-native-community/fetch) - A fetch API polyfill for React Native with text streaming support built on top of React Native's [Networking API](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network).
+- [react-native-fetch-api](https://github.com/react-native-community/fetch) - A fetch API polyfill for React Native with text streaming support built on top of React Native's [Networking API](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network).
 - [@babel/plugin-proposal-async-generator-functions](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-async-generator-functions)
 
 The environment must be [polyfilled](shims/index.js) right when your app starts and before anything is rendered.
 
 ### Alternative fetch polyfill
 
-Instead of using the fetch implementation that [ships](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network/fetch.js) with React Native, which is provided by [GitHub's fetch polyfill](https://github.com/github/fetch), this demo is now using `@react-native-community/fetch`. It implements `Response.body` to add support for text streaming via native incremental data events.
+Instead of using the fetch implementation that [ships](https://github.com/facebook/react-native/blob/v0.63.4/Libraries/Network/fetch.js) with React Native, which is provided by [GitHub's fetch polyfill](https://github.com/github/fetch), this demo is now using `react-native-fetch-api`. It implements `Response.body` to add support for text streaming via native incremental data events.
 
-**NOTE**: The v1.0.0 release of `@react-native-community/fetch` is not yet published.
 ## Known issues and limitations
 
 - It's not possible to create `Blob`s from `ArrayBuffer`s and `ArrayBufferView`s.
